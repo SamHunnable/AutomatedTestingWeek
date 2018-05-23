@@ -24,8 +24,9 @@ public class LoginTest {
 	
 	@Before
 	public void setup() {
-		System.setProperty("webdriver.chrome.driver","C:\\Users\\Admin\\WebDrivers\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", Constants.pathToDriver);
 		driver = new ChromeDriver();
+		ExcelUtils.setExcelFile(Constants.pathToLoginData, 0);
 	}
 	
 	
@@ -34,12 +35,14 @@ public class LoginTest {
 		
 		WebElement element;
 		FileInputStream file;
-		file = new FileInputStream(Constants.loginData);
+		file = new FileInputStream(Constants.pathToLoginData);
 		XSSFWorkbook workbook = new XSSFWorkbook(file);
 		XSSFSheet sheet = workbook.getSheetAt(0);
 		driver.navigate().to(Constants.addaccount);
 		CreateAccount createPage = PageFactory.initElements(driver, CreateAccount.class);	
 		Login loginPage = null;
+		
+		
 		
 		
 		for (int i=1; i<sheet.getPhysicalNumberOfRows(); i++) {
@@ -58,6 +61,15 @@ public class LoginTest {
 
 			element = driver.findElement(By.xpath(Constants.success));
 			assertEquals("**Successful Login**", element.getText());
+			
+			if ("**Successful Login**".equals(element.getText())) {
+				ExcelUtils.setCellData("Pass", i, 2);
+			}
+			else {
+				ExcelUtils.setCellData("Fail", i, 2);
+			}
+			
+			
 			loginPage.navigateCreate(driver);
 			
 		}
