@@ -34,10 +34,12 @@ public class LoginTest {
 	public void test() throws IOException {
 		
 		WebElement element;
+		
 		FileInputStream file;
 		file = new FileInputStream(Constants.pathToLoginData);
 		XSSFWorkbook workbook = new XSSFWorkbook(file);
 		XSSFSheet sheet = workbook.getSheetAt(0);
+		
 		driver.navigate().to(Constants.addaccount);
 		CreateAccount createPage = PageFactory.initElements(driver, CreateAccount.class);	
 		Login loginPage = null;
